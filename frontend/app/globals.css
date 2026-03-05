@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Subtle mobile-like navigation motion */
+@keyframes pageSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.page-slide-back {
+  animation: pageSlideBack 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes pageSlideBack {
+  from {
+    opacity: 0;
+    transform: translateX(-14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.page-slide-in {
+  animation: pageSlideIn 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Press feedback for tappable cards */
+.tap-card {
+  transition: transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+}
+
+.tap-card:active {
+  transform: scale(0.985);
+  opacity: 0.96;
+}
+
+/* Match button tap feedback to tappable cards across the app */
+button {
+  transition: transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+}
+
+button:active:not(:disabled) {
+  transform: scale(0.985);
+  opacity: 0.96;
+}
