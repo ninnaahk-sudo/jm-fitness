@@ -2,13 +2,14 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { login } from "@/lib/api";
+import { login, registerTrainer } from "@/lib/api";
 import { setLoggedInUsername, setToken } from "@/lib/auth";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [username, setUsername] = useState("trainer1");
-  const [password, setPassword] = useState("password123");
+  const [isRegister, setIsRegister] = useState(false);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -18,7 +19,9 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      const data = await login(username, password);
+      const data = isRegister
+        ? await registerTrainer(username, password)
+        : await login(username, password);
       setToken(data.token);
       setLoggedInUsername(data.user.username);
 
@@ -143,7 +146,27 @@ export default function LoginPage() {
             opacity: loading ? 0.7 : 1,
           }}
         >
-          {loading ? "..." : "ENTER"}
+          {loading ? "..." : isRegister ? "REGISTER" : "ENTER"}
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            setIsRegister(!isRegister);
+            setError(null);
+          }}
+          style={{
+            justifySelf: "start",
+            background: "none",
+            border: "none",
+            fontFamily: "Georgia, Times New Roman, serif",
+            fontSize: 13,
+            color: "#5d3a4a",
+            textDecoration: "underline",
+            cursor: "pointer",
+          }}
+        >
+          {isRegister ? "Already have an account? Log in" : "First time? Register as trainer"}
         </button>
 
         {error ? (

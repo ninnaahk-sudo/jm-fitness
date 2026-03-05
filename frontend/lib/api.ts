@@ -39,6 +39,15 @@ export async function login(username: string, password: string) {
   return handleJson<LoginResponse>(res);
 }
 
+export async function registerTrainer(username: string, password: string) {
+  const res = await fetch(`${API_BASE_URL}/auth/register-trainer`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, password }),
+  });
+  return handleJson<LoginResponse>(res);
+}
+
 export async function getTrainerClients(token: string) {
   const res = await fetch(`${API_BASE_URL}/trainer/clients`, {
     headers: {

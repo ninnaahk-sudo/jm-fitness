@@ -1,0 +1,14 @@
+# Dependencies
+node_modules
+
+# Environment (secrets - never commit)
+.env
+.env.*
+!.env.example
+
+# Build output
+dist
+
+# Database (local dev)
+*.db
+*.db-journal
