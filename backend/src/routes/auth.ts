@@ -5,8 +5,22 @@ import { signToken } from "../middleware/auth";
 
 export const authRouter = Router();
 
-// Create a trainer account (for now intentionally open for easier local testing via Postman)
+// Check if trainer registration is open (only when no trainers exist - first-time setup)
+authRouter.get("/registration-open", async (_req, res) => {
+  const trainerCount = await prisma.user.count({
+    where: { role: "TRAINER" },
+  });
+  res.json({ open: trainerCount === 0 });
+});
+
+// Create the first trainer account (only allowed when no trainers exist)
 authRouter.post("/register-trainer", async (req, res) => {
+  const trainerCount = await prisma.user.count({
+    where: { role: "TRAINER" },
+  });
+  if (trainerCount > 0) {
+    return res.status(403).json({ error: "Registration is closed. A trainer already exists." });
+  }
   const { username, password } = req.body as {
     username?: string;
     password?: string;

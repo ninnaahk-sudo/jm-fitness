@@ -39,6 +39,12 @@ export async function login(username: string, password: string) {
   return handleJson<LoginResponse>(res);
 }
 
+export async function isRegistrationOpen(): Promise<boolean> {
+  const res = await fetch(`${API_BASE_URL}/auth/registration-open`);
+  const data = await res.json().catch(() => ({ open: false }));
+  return !!data.open;
+}
+
 export async function registerTrainer(username: string, password: string) {
   const res = await fetch(`${API_BASE_URL}/auth/register-trainer`, {
     method: "POST",

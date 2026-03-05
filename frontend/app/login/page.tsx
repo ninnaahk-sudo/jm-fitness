@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { login, registerTrainer } from "@/lib/api";
+import { login, registerTrainer, isRegistrationOpen } from "@/lib/api";
 import { setLoggedInUsername, setToken } from "@/lib/auth";
 
 export default function LoginPage() {
   const router = useRouter();
+  const [registrationOpen, setRegistrationOpen] = useState<boolean | null>(null);
   const [isRegister, setIsRegister] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -38,6 +39,10 @@ export default function LoginPage() {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    isRegistrationOpen().then(setRegistrationOpen);
+  }, []);
 
   return (
     <main
@@ -149,25 +154,27 @@ export default function LoginPage() {
           {loading ? "..." : isRegister ? "REGISTER" : "ENTER"}
         </button>
 
-        <button
-          type="button"
-          onClick={() => {
-            setIsRegister(!isRegister);
-            setError(null);
-          }}
-          style={{
-            justifySelf: "start",
-            background: "none",
-            border: "none",
-            fontFamily: "Georgia, Times New Roman, serif",
-            fontSize: 13,
-            color: "#5d3a4a",
-            textDecoration: "underline",
-            cursor: "pointer",
-          }}
-        >
-          {isRegister ? "Already have an account? Log in" : "First time? Register as trainer"}
-        </button>
+        {registrationOpen !== false && (
+          <button
+            type="button"
+            onClick={() => {
+              setIsRegister(!isRegister);
+              setError(null);
+            }}
+            style={{
+              justifySelf: "start",
+              background: "none",
+              border: "none",
+              fontFamily: "Georgia, Times New Roman, serif",
+              fontSize: 13,
+              color: "#5d3a4a",
+              textDecoration: "underline",
+              cursor: "pointer",
+            }}
+          >
+            {isRegister ? "Already have an account? Log in" : "First time? Register as trainer"}
+          </button>
+        )}
 
         {error ? (
           <p
